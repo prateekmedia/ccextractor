@@ -102,7 +102,7 @@ jobs:
       - name: Setup vcpkg
         run: cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
       - name: Install dependencies
-        run: cd vcpkg && vcpkg install leptonica:x64-windows-static-md
+        run: cd vcpkg && vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md
       - name: build Release-Full
         env:
           LIBCLANG_PATH: "C:\\Program Files\\LLVM\\lib"
@@ -134,7 +134,7 @@ jobs:
       - name: Setup vcpkg
         run: cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
       - name: Install dependencies
-        run: cd vcpkg && vcpkg install leptonica:x64-windows-static-md
+        run: cd vcpkg && vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
