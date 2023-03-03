@@ -2,7 +2,7 @@ use std::env;
 use std::path::PathBuf;
 
 fn main() {
-    let allowlist_functions = vec![
+    let mut allowlist_functions = vec![
         ".*(?i)_?dtvcc_.*",
         "get_visible_.*",
         "get_fts",
@@ -18,7 +18,7 @@ fn main() {
         "mprint",
     ]);
 
-    let allowlist_types = vec![
+    let mut allowlist_types = vec![
         ".*(?i)_?dtvcc_.*",
         "encoder_ctx",
         "lib_cc_decode",
