@@ -130,12 +130,11 @@ jobs:
         uses: microsoft/setup-msbuild@v1.3.1
       - name: Install llvm and clang
         run: choco install llvm
-      - name: Clone vcpkg
-        run: git clone --depth 1 --single-branch --recursive https://github.com/microsoft/vcpkg.git
-      - name: Setup vcpkg
-        run: cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
+      - name: prepare vcpkg
+        run: |
+          vcpkg integrate install
       - name: Install dependencies
-        run: cd vcpkg && vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md
+        run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg[gpl,x264]:x64-windows
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
