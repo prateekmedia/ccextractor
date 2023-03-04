@@ -97,12 +97,11 @@ jobs:
           override: true
       - name: Install Win 10 SDK
         uses: ilammy/msvc-dev-cmd@v1
-      - name: Clone vcpkg
-        run: git clone --depth 1 --single-branch --recursive https://github.com/microsoft/vcpkg.git
-      - name: Setup vcpkg
-        run: cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
-      - name: Install dependencies
-        run: cd vcpkg && vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md
+      - name: Integrate vcpkg
+        run: |
+          vcpkg integrate install
+      - name: Install vcpkg dependencies
+        run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows-static-md
       - name: build Release-Full
         env:
           RUST_BACKTRACE: 1
@@ -130,11 +129,11 @@ jobs:
         uses: microsoft/setup-msbuild@v1.3.1
       - name: Install llvm and clang
         run: choco install llvm
-      - name: prepare vcpkg
+      - name: Integrate vcpkg
         run: |
           vcpkg integrate install
-      - name: Install dependencies
-        run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg[gpl,x264]:x64-windows
+      - name: Install vcpkg dependencies
+        run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows-static-md
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
