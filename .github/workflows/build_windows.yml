@@ -90,7 +90,7 @@ jobs:
       - name: Setup MSBuild.exe
         uses: microsoft/setup-msbuild@v1.3.1
       - name: Install llvm and clang
-        run: choco install llvm pkgconfiglite
+        run: choco install llvm
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -127,7 +127,7 @@ jobs:
       - name: Setup MSBuild.exe
         uses: microsoft/setup-msbuild@v1.3.1
       - name: Install llvm and clang
-        run: choco install llvm pkgconfiglite
+        run: choco install llvm
       - name: Integrate vcpkg
         run: |
           vcpkg integrate install
