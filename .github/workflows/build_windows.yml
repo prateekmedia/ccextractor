@@ -104,7 +104,6 @@ jobs:
         run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows-static-md
       - name: build Release-Full
         env:
-          RUST_BACKTRACE: 1
           LIBCLANG_PATH: "C:\\Program Files\\LLVM\\lib"
           LLVM_CONFIG_PATH: "C:\\Program Files\\LLVM\\bin\\llvm-config"
           CARGO_TARGET_DIR: "..\\..\\windows"
@@ -142,7 +141,6 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
       - name: build Debug-Full
         env:
-          RUST_BACKTRACE: 1
           LIBCLANG_PATH: "C:\\Program Files\\LLVM\\lib"
           LLVM_CONFIG_PATH: "C:\\Program Files\\LLVM\\bin\\llvm-config"
           CARGO_TARGET_DIR: "..\\..\\windows"
