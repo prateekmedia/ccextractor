@@ -101,7 +101,7 @@ jobs:
         run: |
           vcpkg integrate install
       - name: Install vcpkg dependencies
-        run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows-static-md
+        run: vcpkg install pkg-config leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows-static-md
       - name: build Release-Full
         env:
           LIBCLANG_PATH: "C:\\Program Files\\LLVM\\lib"
@@ -132,7 +132,7 @@ jobs:
         run: |
           vcpkg integrate install
       - name: Install vcpkg dependencies
-        run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows-static-md
+        run: vcpkg install pkg-config leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows-static-md
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -149,11 +149,11 @@ jobs:
         working-directory: ./windows
       - name: Display version information
         run: ./ccextractorwinfull.exe --version
-        working-directory: ./windows/Debug-Full
+        working-directory: ./windows/x64/Debug-Full
       - uses: actions/upload-artifact@v3
         with:
           name: CCExtractor Windows OCR and HardSubX Debug build
           path: |
-            ./windows/Debug-Full/ccextractorwinfull.exe
-            ./windows/Debug-Full/ccextractorwinfull.pdb
-            ./windows/Debug-Full/*.dll
+            ./windows/x64/Debug-Full/ccextractorwinfull.exe
+            ./windows/x64/Debug-Full/ccextractorwinfull.pdb
+            ./windows/x64/Debug-Full/*.dll
