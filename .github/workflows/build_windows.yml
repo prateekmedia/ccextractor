@@ -101,7 +101,7 @@ jobs:
         run: |
           vcpkg integrate install
       - name: Install vcpkg dependencies
-        run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows-static-md
+        run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows
       - name: build Release-Full
         env:
           LIBCLANG_PATH: "C:\\Program Files\\LLVM\\lib"
@@ -132,7 +132,7 @@ jobs:
         run: |
           vcpkg integrate install
       - name: Install vcpkg dependencies
-        run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows-static-md
+        run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
