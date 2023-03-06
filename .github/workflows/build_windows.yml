@@ -102,7 +102,7 @@ jobs:
       - name: Setup vcpkg
         run: cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
       - name: Cache vcpkg files
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: vcpkg-cache
         with:
           path: |
@@ -145,7 +145,7 @@ jobs:
       - name: Setup vcpkg
         run: cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
       - name: Cache vcpkg files
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: vcpkg-cache
         with:
           path: |
