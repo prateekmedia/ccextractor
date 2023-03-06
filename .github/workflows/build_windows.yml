@@ -97,9 +97,17 @@ jobs:
           override: true
       - name: Install Win 10 SDK
         uses: ilammy/msvc-dev-cmd@v1
-      - name: Integrate vcpkg
-        run: |
-          vcpkg integrate install
+      - name: Clone vcpkg
+        run: git clone --depth 1 --single-branch --recursive https://github.com/microsoft/vcpkg.git
+      - name: Setup vcpkg
+        run: cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
+      - name: Cache vcpkg packages
+        uses: actions/cache@v2
+        with:
+          path: vcpkg/installed
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg/installed/**/*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-vcpkg-
       - name: Install vcpkg dependencies
         run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows
       - name: build Release-Full
@@ -128,9 +136,17 @@ jobs:
         uses: microsoft/setup-msbuild@v1.3.1
       - name: Install llvm and clang
         run: choco install llvm
-      - name: Integrate vcpkg
-        run: |
-          vcpkg integrate install
+      - name: Clone vcpkg
+        run: git clone --depth 1 --single-branch --recursive https://github.com/microsoft/vcpkg.git
+      - name: Setup vcpkg
+        run: cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
+      - name: Cache vcpkg packages
+        uses: actions/cache@v2
+        with:
+          path: vcpkg/installed
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg/installed/**/*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-vcpkg-
       - name: Install vcpkg dependencies
         run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows
       - uses: actions-rs/toolchain@v1
