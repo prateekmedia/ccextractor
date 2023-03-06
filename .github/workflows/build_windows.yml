@@ -108,8 +108,7 @@ jobs:
         run: |
           cd vcpkg && .\vcpkg integrate install
       - name: Install vcpkg dependencies
-        if: steps.vcpkg.outputs.cache-hit != 'true'
-        run: vcpkg install leptonica:x64-windows tesseract:x64-windows ffmpeg:x64-windows
+        run: vcpkg install leptonica tesseract ffmpeg --triplet x64-windows
       - name: build Release-Full
         env:
           LIBCLANG_PATH: "C:\\Program Files\\LLVM\\lib"
@@ -144,8 +143,7 @@ jobs:
           cache-version: "1"
           ignore-reserve-cache-error: true
       - name: Install vcpkg dependencies
-        if: steps.vcpkg.outputs.cache-hit != 'true'
-        run: vcpkg install leptonica:x64-windows tesseract:x64-windows ffmpeg:x64-windows
+        run: vcpkg install leptonica tesseract ffmpeg --triplet x64-windows
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
