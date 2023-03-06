@@ -97,18 +97,23 @@ jobs:
           override: true
       - name: Install Win 10 SDK
         uses: ilammy/msvc-dev-cmd@v1
-      - name: Setup Vcpkg
-        id: vcpkg
-        uses: friendlyanon/setup-vcpkg@v1
+      - name: Clone vcpkg
+        run: git clone --depth 1 --single-branch --branch 2023.02.24 --recursive https://github.com/microsoft/vcpkg.git
+      - name: Setup vcpkg
+        run: cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
+      - name: Cache vcpkg files
+        uses: actions/cache@v2
+        id: vcpkg-cache
         with:
-          committish: "2023.02.24"
-          cache-version: "1"
-          ignore-reserve-cache-error: true
-      - name: Integrate vcpkg
-        run: |
-          cd vcpkg && vcpkg integrate install
-      - name: Install vcpkg dependencies
-        run: vcpkg/vcpkg install leptonica tesseract ffmpeg --triplet x64-windows
+          path: |
+            vcpkg/vcpkg
+            vcpkg/vcpkg.exe
+            vcpkg/.cache
+          key: vcpkg-${{ runner.os }}-1-498b0bb4f260835de6c696850efccb3e2af13297
+          restore-keys: |
+            vcpkg-${{ runner.os }}-1
+      - name: Install dependencies
+        run: cd vcpkg && vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md
       - name: build Release-Full
         env:
           LIBCLANG_PATH: "C:\\Program Files\\LLVM\\lib"
@@ -135,15 +140,23 @@ jobs:
         uses: microsoft/setup-msbuild@v1.3.1
       - name: Install llvm and clang
         run: choco install llvm
-      - name: Setup Vcpkg
-        id: vcpkg
-        uses: friendlyanon/setup-vcpkg@v1
+      - name: Clone vcpkg
+        run: git clone --depth 1 --single-branch --branch 2023.02.24 --recursive https://github.com/microsoft/vcpkg.git
+      - name: Setup vcpkg
+        run: cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
+      - name: Cache vcpkg files
+        uses: actions/cache@v2
+        id: vcpkg-cache
         with:
-          committish: "2023.02.24"
-          cache-version: "1"
-          ignore-reserve-cache-error: true
-      - name: Install vcpkg dependencies
-        run: vcpkg/vcpkg install leptonica tesseract ffmpeg --triplet x64-windows
+          path: |
+            vcpkg/vcpkg
+            vcpkg/vcpkg.exe
+            vcpkg/.cache
+          key: vcpkg-${{ runner.os }}-1-498b0bb4f260835de6c696850efccb3e2af13297
+          restore-keys: |
+            vcpkg-${{ runner.os }}-1
+      - name: Install dependencies
+        run: cd vcpkg && vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
