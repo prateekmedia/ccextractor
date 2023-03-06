@@ -97,18 +97,16 @@ jobs:
           override: true
       - name: Install Win 10 SDK
         uses: ilammy/msvc-dev-cmd@v1
-      - name: Clone vcpkg
-        run: git clone --depth 1 --single-branch --recursive https://github.com/microsoft/vcpkg.git
-      - name: Setup vcpkg
-        run: cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
-      - name: Cache vcpkg packages
-        uses: actions/cache@v2
+      - name: Setup Vcpkg
+        id: vcpkg
+        uses: friendlyanon/setup-vcpkg@v1
         with:
-          path: vcpkg/installed
-          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg/installed/**/*.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-vcpkg-
+          committish: "2023.02.24"
+          cache-version: "1"
+          ignore-reserve-cache-error: true
+          path: vcpkg
       - name: Install vcpkg dependencies
+        if: steps.vcpkg.outputs.cache-hit != 'true'
         run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows
       - name: build Release-Full
         env:
@@ -136,18 +134,16 @@ jobs:
         uses: microsoft/setup-msbuild@v1.3.1
       - name: Install llvm and clang
         run: choco install llvm
-      - name: Clone vcpkg
-        run: git clone --depth 1 --single-branch --recursive https://github.com/microsoft/vcpkg.git
-      - name: Setup vcpkg
-        run: cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
-      - name: Cache vcpkg packages
-        uses: actions/cache@v2
+      - name: Setup Vcpkg
+        id: vcpkg
+        uses: friendlyanon/setup-vcpkg@v1
         with:
-          path: vcpkg/installed
-          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg/installed/**/*.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-vcpkg-
+          committish: "2023.02.24"
+          cache-version: "1"
+          ignore-reserve-cache-error: true
+          path: vcpkg
       - name: Install vcpkg dependencies
+        if: steps.vcpkg.outputs.cache-hit != 'true'
         run: vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows
       - uses: actions-rs/toolchain@v1
         with:
