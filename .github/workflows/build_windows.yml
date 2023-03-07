@@ -97,24 +97,18 @@ jobs:
           override: true
       - name: Install Win 10 SDK
         uses: ilammy/msvc-dev-cmd@v1
-      - name: Setup vcpkg
+      - name: Remove old vcpkg
         run: |
-          git clone --depth 1 --single-branch --branch 2023.02.24 --recursive https://github.com/microsoft/vcpkg.git
-          cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
-          echo "VCPKG_DEFAULT_BINARY_CACHE=$(pwd)/vcpkg/.cache" >> $GITHUB_ENV
-      - name: Cache vcpkg files
-        uses: actions/cache@v3
-        id: vcpkg-cache
+          rmdir /s /q "$VCPKG_INSTALLATION_ROOT"
+      - name: Setup Vcpkg
+        id: vcpkg
+        uses: friendlyanon/setup-vcpkg@v1
         with:
-          path: |
-            vcpkg/vcpkg
-            vcpkg/vcpkg.exe
-            vcpkg/.cache
-          key: vcpkg-${{ runner.os }}-1-498b0bb4f260835de6c696850efccb3e2af13297
-          restore-keys: |
-            vcpkg-${{ runner.os }}-1
+          committish: "2023.02.24"
+          cache-version: "1"
+          ignore-reserve-cache-error: true
       - name: Install dependencies
-        run: cd vcpkg && vcpkg install leptonica tesseract ffmpeg --triplet x64-windows-static-md
+        run: cd vcpkg && vcpkg integrate install && vcpkg install leptonica:x64-windows-static-md tesseract:x64-windows-static-md ffmpeg:x64-windows
       - name: build Release-Full
         env:
           LIBCLANG_PATH: "C:\\Program Files\\LLVM\\lib"
@@ -140,7 +134,7 @@ jobs:
       - name: Setup MSBuild.exe
         uses: microsoft/setup-msbuild@v1.3.1
       - name: Install llvm and clang
-        run: choco install llvm
+        run: choco install llvm pkgconfiglite
       - name: Setup vcpkg
         run: |
           git clone --depth 1 --single-branch --branch 2023.02.24 --recursive https://github.com/microsoft/vcpkg.git
@@ -158,28 +152,28 @@ jobs:
           restore-keys: |
             vcpkg-${{ runner.os }}-1
       - name: Install dependencies
-        run: cd vcpkg && vcpkg install leptonica tesseract ffmpeg --triplet x64-windows-static-md
-      # - uses: actions-rs/toolchain@v1
-      #   with:
-      #     toolchain: stable
-      #     override: true
-      # - name: Install Win 10 SDK
-      #   uses: ilammy/msvc-dev-cmd@v1
-      # - name: build Debug-Full
-      #   env:
-      #     LIBCLANG_PATH: "C:\\Program Files\\LLVM\\lib"
-      #     LLVM_CONFIG_PATH: "C:\\Program Files\\LLVM\\bin\\llvm-config"
-      #     CARGO_TARGET_DIR: "..\\..\\windows"
-      #     BINDGEN_EXTRA_CLANG_ARGS: -fmsc-version=0
-      #   run: msbuild ccextractor.sln /p:Configuration=Debug-Full /p:Platform=x64
-      #   working-directory: ./windows
-      # - name: Display version information
-      #   run: ./ccextractorwinfull.exe --version
-      #   working-directory: ./windows/x64/Debug-Full
-      # - uses: actions/upload-artifact@v3
-      #   with:
-      #     name: CCExtractor Windows OCR and HardSubX Debug build
-      #     path: |
-      #       ./windows/x64/Debug-Full/ccextractorwinfull.exe
-      #       ./windows/x64/Debug-Full/ccextractorwinfull.pdb
-      #       ./windows/x64/Debug-Full/*.dll
+        run: cd vcpkg && vcpkg install leptonica tesseract --triplet x64-windows-static-md
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - name: Install Win 10 SDK
+        uses: ilammy/msvc-dev-cmd@v1
+      - name: build Debug-Full
+        env:
+          LIBCLANG_PATH: "C:\\Program Files\\LLVM\\lib"
+          LLVM_CONFIG_PATH: "C:\\Program Files\\LLVM\\bin\\llvm-config"
+          CARGO_TARGET_DIR: "..\\..\\windows"
+          BINDGEN_EXTRA_CLANG_ARGS: -fmsc-version=0
+        run: msbuild ccextractor.sln /p:Configuration=Debug-Full /p:Platform=x64
+        working-directory: ./windows
+      - name: Display version information
+        run: ./ccextractorwinfull.exe --version
+        working-directory: ./windows/x64/Debug-Full
+      - uses: actions/upload-artifact@v3
+        with:
+          name: CCExtractor Windows OCR and HardSubX Debug build
+          path: |
+            ./windows/x64/Debug-Full/ccextractorwinfull.exe
+            ./windows/x64/Debug-Full/ccextractorwinfull.pdb
+            ./windows/x64/Debug-Full/*.dll
