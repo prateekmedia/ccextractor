@@ -97,10 +97,11 @@ jobs:
           override: true
       - name: Install Win 10 SDK
         uses: ilammy/msvc-dev-cmd@v1
-      - name: Clone vcpkg
-        run: git clone --depth 1 --single-branch --branch 2023.02.24 --recursive https://github.com/microsoft/vcpkg.git
       - name: Setup vcpkg
-        run: cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
+        run: |
+          git clone --depth 1 --single-branch --branch 2023.02.24 --recursive https://github.com/microsoft/vcpkg.git
+          cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
+          echo "VCPKG_DEFAULT_BINARY_CACHE=$(pwd)/vcpkg/.cache" >> $GITHUB_ENV
       - name: Cache vcpkg files
         uses: actions/cache@v3
         id: vcpkg-cache
@@ -140,10 +141,11 @@ jobs:
         uses: microsoft/setup-msbuild@v1.3.1
       - name: Install llvm and clang
         run: choco install llvm
-      - name: Clone vcpkg
-        run: git clone --depth 1 --single-branch --branch 2023.02.24 --recursive https://github.com/microsoft/vcpkg.git
       - name: Setup vcpkg
-        run: cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
+        run: |
+          git clone --depth 1 --single-branch --branch 2023.02.24 --recursive https://github.com/microsoft/vcpkg.git
+          cd vcpkg && bootstrap-vcpkg.bat && vcpkg integrate install
+          echo "VCPKG_DEFAULT_BINARY_CACHE=$(pwd)/vcpkg/.cache" >> $GITHUB_ENV
       - name: Cache vcpkg files
         uses: actions/cache@v3
         id: vcpkg-cache
@@ -161,23 +163,23 @@ jobs:
         with:
           toolchain: stable
           override: true
-      # - name: Install Win 10 SDK
-      #   uses: ilammy/msvc-dev-cmd@v1
-      # - name: build Debug-Full
-      #   env:
-      #     LIBCLANG_PATH: "C:\\Program Files\\LLVM\\lib"
-      #     LLVM_CONFIG_PATH: "C:\\Program Files\\LLVM\\bin\\llvm-config"
-      #     CARGO_TARGET_DIR: "..\\..\\windows"
-      #     BINDGEN_EXTRA_CLANG_ARGS: -fmsc-version=0
-      #   run: msbuild ccextractor.sln /p:Configuration=Debug-Full /p:Platform=x64
-      #   working-directory: ./windows
-      # - name: Display version information
-      #   run: ./ccextractorwinfull.exe --version
-      #   working-directory: ./windows/x64/Debug-Full
-      # - uses: actions/upload-artifact@v3
-      #   with:
-      #     name: CCExtractor Windows OCR and HardSubX Debug build
-      #     path: |
-      #       ./windows/x64/Debug-Full/ccextractorwinfull.exe
-      #       ./windows/x64/Debug-Full/ccextractorwinfull.pdb
-      #       ./windows/x64/Debug-Full/*.dll
+      - name: Install Win 10 SDK
+        uses: ilammy/msvc-dev-cmd@v1
+      - name: build Debug-Full
+        env:
+          LIBCLANG_PATH: "C:\\Program Files\\LLVM\\lib"
+          LLVM_CONFIG_PATH: "C:\\Program Files\\LLVM\\bin\\llvm-config"
+          CARGO_TARGET_DIR: "..\\..\\windows"
+          BINDGEN_EXTRA_CLANG_ARGS: -fmsc-version=0
+        run: msbuild ccextractor.sln /p:Configuration=Debug-Full /p:Platform=x64
+        working-directory: ./windows
+      - name: Display version information
+        run: ./ccextractorwinfull.exe --version
+        working-directory: ./windows/x64/Debug-Full
+      - uses: actions/upload-artifact@v3
+        with:
+          name: CCExtractor Windows OCR and HardSubX Debug build
+          path: |
+            ./windows/x64/Debug-Full/ccextractorwinfull.exe
+            ./windows/x64/Debug-Full/ccextractorwinfull.pdb
+            ./windows/x64/Debug-Full/*.dll
