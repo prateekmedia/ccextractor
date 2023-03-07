@@ -97,9 +97,6 @@ jobs:
           override: true
       - name: Install Win 10 SDK
         uses: ilammy/msvc-dev-cmd@v1
-      - name: Remove old vcpkg
-        run: |
-          rmdir /s /q "$VCPKG_INSTALLATION_ROOT"
       - name: Setup Vcpkg
         id: vcpkg
         uses: friendlyanon/setup-vcpkg@v1
@@ -115,6 +112,7 @@ jobs:
           LLVM_CONFIG_PATH: "C:\\Program Files\\LLVM\\bin\\llvm-config"
           CARGO_TARGET_DIR: "..\\..\\windows"
           BINDGEN_EXTRA_CLANG_ARGS: -fmsc-version=0
+          VCPKG_ROOT: "..\\..\\vcpkg"
         run: msbuild ccextractor.sln /p:Configuration=Release-Full /p:Platform=x64
         working-directory: ./windows
       - name: Display version information
