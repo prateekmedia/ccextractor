@@ -26,10 +26,12 @@ use crate::utils::null_pointer;
 use crate::utils::string_to_c_char;
 use crate::utils::string_to_c_chars;
 
+/// Trait for converting C types to their Rust counterparts
 pub trait FromC<T> {
     fn from_c(value: T) -> Self;
 }
 
+/// Trait for converting Rust types to their C counterparts
 pub trait CType<T> {
     /// # Safety
     /// This function is unsafe because it dereferences the pointer passed to it.
